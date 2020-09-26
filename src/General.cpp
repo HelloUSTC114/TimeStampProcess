@@ -1,6 +1,6 @@
 #include "General.h"
 
-TChain *JohnGeneral::GenerateChain(std::string treeName, const std::vector< std::string> &keyWord, TChain *chain)
+TChain *JohnGeneral::GenerateChain(std::string treeName, const std::vector<std::string> &keyWord, TChain *chain)
 {
     gSystem->Exec("ls  1> .~filelist 2> /dev/null");
 
@@ -19,12 +19,13 @@ TChain *JohnGeneral::GenerateChain(std::string treeName, const std::vector< std:
         bool continueFlag = 0;
         for (size_t keyCount = 0; keyCount < keyWord.size(); keyCount++)
         {
-            if(s_temp.find(keyWord[keyCount]) == string::npos)
+            if (s_temp.find(keyWord[keyCount]) == string::npos)
             {
                 continueFlag = 1;
             }
         }
-        if(continueFlag)    continue;
+        if (continueFlag)
+            continue;
 
         cout << "File: " << s_temp << " Read" << endl;
         ch->Add(s_temp.c_str());

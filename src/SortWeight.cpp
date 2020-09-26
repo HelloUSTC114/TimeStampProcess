@@ -17,13 +17,13 @@ vector<ChWeight> &SortByAscend(vector<ChWeight> &ChArray)
 vector<int> SortByAscend(const vector<double> &ChArray)
 {
     vector<ChWeight> weightTemp;
-    for(int i = 0; i < ChArray.size(); i++)
+    for (int i = 0; i < ChArray.size(); i++)
     {
-        weightTemp.push_back(ChWeight{i,ChArray[i]});
+        weightTemp.push_back(ChWeight{i, ChArray[i]});
     }
     SortByAscend(weightTemp);
     vector<int> chSequence;
-    for(int i = 0; i < ChArray.size(); i++)
+    for (int i = 0; i < ChArray.size(); i++)
     {
         chSequence.push_back(weightTemp[i].first);
     }

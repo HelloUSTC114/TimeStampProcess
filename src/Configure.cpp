@@ -322,19 +322,19 @@ BoardType DetectorConfig::JudgeDetectorType(string word)
 
 string DetectorConfig::JudgeDetectorType(BoardType type)
 {
-    if(type == Square)
+    if (type == Square)
     {
         return "Square";
     }
-    else if(type == Tri)
+    else if (type == Tri)
     {
         return "Triangle";
     }
-    else if(type == Plate)
+    else if (type == Plate)
     {
         return "Plate";
     }
-    else if(type == Default)
+    else if (type == Default)
     {
         return "Default";
     }

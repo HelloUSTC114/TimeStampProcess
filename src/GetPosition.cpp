@@ -887,7 +887,7 @@ double GetPositionForPlate::GetPosition(CombinedData &data, UChar_t mac5, double
         // cout << "LeftIndex: " << LeftIndex << endl;
         // cout << "RightIndex: " << RightIndex << endl;
         int Points = 1;
-        double SumPosition = xMid*yWeight[0];
+        double SumPosition = xMid * yWeight[0];
         double SumWeight = yWeight[0];
         if (LeftIndex > 0)
         {

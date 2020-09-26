@@ -28,10 +28,9 @@
 
 double TriDetectorFitFun(double *xs, double *par); // Erf function plus a small correction
 
-double FitFunErf(double *xs, double *par);  // Only Erf function
+double FitFunErf(double *xs, double *par); // Only Erf function
 
-double FitFunPhotonNum(double *xs, double *par);    // No charge Q, just distribution of Photon number
-
+double FitFunPhotonNum(double *xs, double *par); // No charge Q, just distribution of Photon number
 
 struct CaliException
 {
@@ -94,14 +93,11 @@ private:
 };
 
 double GetCRPeakSquare(TH1 *h, double cut = 300);
-double GetCRPeakTri(TH1*h, double cut = 300);
-
+double GetCRPeakTri(TH1 *h, double cut = 300);
 
 void ExtractArgument(double QMax, double QSigma, double NMax, double beta);
 
-double GetCRCaliPlate(TH1*h);
-
-
+double GetCRCaliPlate(TH1 *h);
 
 #define gCaliManager (CaliManager::CurrentCaliManager())
 

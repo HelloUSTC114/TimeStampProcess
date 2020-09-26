@@ -19,7 +19,7 @@ bool CRCaliLogicJudge::JudgeLogic(const vector<bool> &flagArray) const
     return true;
 }
 
-bool CRImageLogicJudge::JudgeLogic(const vector<bool> &flagArray) const 
+bool CRImageLogicJudge::JudgeLogic(const vector<bool> &flagArray) const
 {
     int size = flagArray.size();
     int RequiredMinBoards = gConfigure->GetTotalBoardNumber();
@@ -141,14 +141,13 @@ vector<vector<int>> &CheckValid::GetInvalidDataBase()
     return fInvalidDataBase;
 }
 
-bool CheckLogicAndValid(const CombinedData& CData, const LogicJudge & logic)
+bool CheckLogicAndValid(const CombinedData &CData, const LogicJudge &logic)
 {
     bool logicResult = logic.JudgeLogic(CData);
-    if(!logicResult)
+    if (!logicResult)
     {
         return false;
     }
     bool checkResult = CheckValid::CheckValidData(CData, 0);
     return checkResult;
-
 }

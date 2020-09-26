@@ -12,7 +12,7 @@ using namespace std;
 
 namespace JohnGeneral
 {
-    TChain * GenerateChain(std::string treeName, const std::vector< std::string> &keyWord,TChain *chain = NULL);
+    TChain *GenerateChain(std::string treeName, const std::vector<std::string> &keyWord, TChain *chain = NULL);
 
 }
 

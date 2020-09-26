@@ -15,14 +15,12 @@ struct WeightCompareDescend
 {
     bool operator()(const ChWeight &c1, const ChWeight &c2)
     {
-        return c1.second>c2.second;
+        return c1.second > c2.second;
     }
 };
 
-vector<ChWeight> & SortByDescend(vector<ChWeight> & ChArray);
+vector<ChWeight> &SortByDescend(vector<ChWeight> &ChArray);
 vector<int> SortByDescend(const vector<double> &ChArray);
-
-
 
 // Ascend Weight
 struct WeightCompareAscend
@@ -35,8 +33,7 @@ struct WeightCompareAscend
 
 vector<ChWeight> &SortByAscend(vector<ChWeight> &ChArray);
 
-vector<int>  SortByAscend(const vector<double> & ChArray);
-
+vector<int> SortByAscend(const vector<double> &ChArray);
 
 template <typename T>
 vector<int> sortByAscend(vector<T> &ChArray)

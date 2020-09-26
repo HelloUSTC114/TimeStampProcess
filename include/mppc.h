@@ -20,79 +20,74 @@
 #include <iostream>
 #include <fstream>
 
-
 #include "Configure.h"
 
 #include "TPrimaryData.h"
 
-
 using namespace std;
-// John Generate TChain file in folder 
-TChain * Generate_Chain(TChain *Chain = NULL);
+// John Generate TChain file in folder
+TChain *Generate_Chain(TChain *Chain = NULL);
 
 class mppcHisto;
 
-class mppc {
+class mppc
+{
 public:
-   mppc(TTree *tree=0); // Construct function
+   mppc(TTree *tree = 0); // Construct function
    virtual ~mppc();
-   virtual Int_t    Cut(Long64_t entry);
-   virtual Int_t    GetEntry(Long64_t entry);
+   virtual Int_t Cut(Long64_t entry);
+   virtual Int_t GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
-   virtual Bool_t   Notify();
-   virtual void     Show(Long64_t entry = -1);
-   virtual int GetEntries(){return fChain->GetEntries();}
+   virtual void Init(TTree *tree);
+   virtual Bool_t Notify();
+   virtual void Show(Long64_t entry = -1);
+   virtual int GetEntries() { return fChain->GetEntries(); }
 
    // Add different versions of Loop function
-   virtual void     Loop();
+   virtual void Loop();
    void DrawAllChannel(string s = "AllChannel.root");
    void DrawAllOrigin(string s = "AllChannel.root");
 
-   bool ConstructOneData(PrimaryDataPtr &, bool &);   // bool means whether it's a event or time clock
+   bool ConstructOneData(PrimaryDataPtr &, bool &); // bool means whether it's a event or time clock
 
-// private:
-   int fBoardNum;  //!  total Board number
+   // private:
+   int fBoardNum;    //!  total Board number
    int fReadCounter; //!
-   int fEntries;  //!
-
+   int fEntries;     //!
 
    // Declaration of leaf types
-   UChar_t         mac5;
-   UShort_t        chg[32];
-   UInt_t          ts0;
-   UInt_t          ts1;
-   UInt_t          ts0_ref;
-   UInt_t          ts1_ref;
-
+   UChar_t mac5;
+   UShort_t chg[32];
+   UInt_t ts0;
+   UInt_t ts1;
+   UInt_t ts0_ref;
+   UInt_t ts1_ref;
 
    // List of branches
-   TBranch        *b_mac5;   //!
-   TBranch        *b_chg;   //!
-   TBranch        *b_ts0;   //!
-   TBranch        *b_ts1;   //!
-   TBranch        *b_ts0_ref;   //!
-   TBranch        *b_ts1_ref;   //!
+   TBranch *b_mac5;    //!
+   TBranch *b_chg;     //!
+   TBranch *b_ts0;     //!
+   TBranch *b_ts1;     //!
+   TBranch *b_ts0_ref; //!
+   TBranch *b_ts1_ref; //!
 
-   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-   Int_t           fCurrent; //!current Tree number in a TChain
+   TTree *fChain;  //!pointer to the analyzed TTree or TChain
+   Int_t fCurrent; //!current Tree number in a TChain
 
-
-friend class mppcHisto;
-
+   friend class mppcHisto;
 };
 
 class mppcHisto
 {
 public:
-   mppcHisto(mppc*);
+   mppcHisto(mppc *);
    ~mppcHisto();
 
    void AnalyzeQuantile(UChar_t mac5, int group);
 
 private:
-   mppc * fMppc;
-   TH1D*** fBoardHistArray;
+   mppc *fMppc;
+   TH1D ***fBoardHistArray;
    bool fHistFlag;
 
    double fQuantiles1[100], fQuantiles2[100];
@@ -100,8 +95,8 @@ private:
    int fBoardIndex = 0;
    int fCh1 = 0, fCh2 = 0;
 
-   TH1D* h1_quantile[100];
-   TH1D* h2_quantile[100];
+   TH1D *h1_quantile[100];
+   TH1D *h2_quantile[100];
 
    int JudgeQuantile(double number, double *quantiles);
 
@@ -109,51 +104,55 @@ private:
    void GetQuantile(UChar_t mac5, int group);
    void BuildQuantileHisto();
    void SaveAndPrint(string sFile = "test.root");
-
 };
 
-TDirectory* GetBoardDir(TFile*, UChar_t);
-TH1D **CreateNewBoardHist(UChar_t); // For DrawSignal
+TDirectory *GetBoardDir(TFile *, UChar_t);
+TH1D **CreateNewBoardHist(UChar_t);                                 // For DrawSignal
 TH1D **CreateNewBoardHist(UChar_t, string, bool nullDirectory = 0); // For DrawOrigin
 #endif
 
 #ifdef mppc_cxx
-mppc::mppc(TTree *tree) : fChain(0) 
+mppc::mppc(TTree *tree) : fChain(0)
 {
 
    // Construct fBoardNum & Reset clock counter;
-   fBoardNum = gConfigure -> BoardCounts();
+   fBoardNum = gConfigure->BoardCounts();
    fReadCounter = 0;
    fEntries = 0;
-   if (tree == 0) {
+   if (tree == 0)
+   {
       auto chain = new TChain("mppc");
       Generate_Chain(chain);
       tree = chain;
    }
-   if(tree)
+   if (tree)
       Init(tree);
-   if(b_mac5)
-      fEntries = fChain -> GetEntries();
-   
+   if (b_mac5)
+      fEntries = fChain->GetEntries();
 }
 
 mppc::~mppc()
 {
-   if (!fChain) return;
+   if (!fChain)
+      return;
    delete fChain->GetCurrentFile();
 }
 
 Int_t mppc::GetEntry(Long64_t entry)
 {
-   if (!fChain) return 0;
+   if (!fChain)
+      return 0;
    return fChain->GetEntry(entry);
 }
 Long64_t mppc::LoadTree(Long64_t entry)
 {
-   if (!fChain) return -5;
+   if (!fChain)
+      return -5;
    Long64_t centry = fChain->LoadTree(entry);
-   if (centry < 0) return centry;
-   if (fChain->GetTreeNumber() != fCurrent) {
+   if (centry < 0)
+      return centry;
+   if (fChain->GetTreeNumber() != fCurrent)
+   {
       fCurrent = fChain->GetTreeNumber();
       Notify();
    }
@@ -171,7 +170,8 @@ void mppc::Init(TTree *tree)
    // (once per file to be processed).
 
    // Set branch addresses and branch pointers
-   if (!tree) return;
+   if (!tree)
+      return;
    fChain = tree;
    fCurrent = -1;
    fChain->SetMakeClass(1);
@@ -198,17 +198,17 @@ Bool_t mppc::Notify()
 
 void mppc::Show(Long64_t entry)
 {
-   if (!fChain) return;
+   if (!fChain)
+      return;
    fChain->Show(entry);
 }
 Int_t mppc::Cut(Long64_t entry)
 {
-   if((ts0 == 0) || (ts1 == 0))
+   if ((ts0 == 0) || (ts1 == 0))
    {
       return -1;
    }
    return 1;
 }
-
 
 #endif

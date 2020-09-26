@@ -13,8 +13,6 @@ public:
     // ~LogicJudge();
     virtual bool JudgeLogic(const CombinedData &CData) const = 0;
     virtual bool JudgeLogic(const vector<bool> &) const = 0;
-
-
 };
 
 // Class that stashes all invalid data from each detector
@@ -31,18 +29,16 @@ class CRCaliLogicJudge : public LogicJudge // Cosmic Ray calibration logic
 {
 public:
     bool JudgeLogic(const vector<bool> &) const override;
-    bool JudgeLogic(const CombinedData &CData) const override {return JudgeLogic(CData.GetFlagArray());}
-
+    bool JudgeLogic(const CombinedData &CData) const override { return JudgeLogic(CData.GetFlagArray()); }
 };
 
 class CRImageLogicJudge : public LogicJudge // CR imaging logic
 {
 public:
     bool JudgeLogic(const vector<bool> &) const override;
-    bool JudgeLogic(const CombinedData &CData)const override {return JudgeLogic(CData.GetFlagArray());}
-
+    bool JudgeLogic(const CombinedData &CData) const override { return JudgeLogic(CData.GetFlagArray()); }
 };
 
-bool CheckLogicAndValid(const CombinedData&CData, const LogicJudge & logic);
+bool CheckLogicAndValid(const CombinedData &CData, const LogicJudge &logic);
 
 #endif

@@ -100,8 +100,8 @@ bool FillData(CombinedData data, TH2* h, Position &pos, bool Verbose = 0);
 
 // Above are previously programming code, which aims at Processing multi boards situation
 
-const double TriangleThickness = 1.05; // Define TriangleThickness as 10.5 cm
-const double TriangleLength = TriangleThickness*2; // Define TriangeLLength as 21 cm
+const double TriangleThickness = 1.05;               // Define TriangleThickness as 10.5 cm
+const double TriangleLength = TriangleThickness * 2; // Define TriangeLLength as 21 cm
 
 class CombinedData;
 
@@ -109,7 +109,7 @@ class VPosition
 {
 public:
     VPosition() = default;
-    virtual double GetPosition(CombinedData &data, UChar_t mac5, double &eventTotalCharge) = 0;   // Should also return event charge
+    virtual double GetPosition(CombinedData &data, UChar_t mac5, double &eventTotalCharge) = 0; // Should also return event charge
 };
 
 class GetPositionForSquareSingle : public VPosition
@@ -134,7 +134,7 @@ public:
     double GetPosition(CombinedData &data, UChar_t mac5, double &, int &NFiredStrip, double slopeinverse = 0);
     double GetPositionCorrection(CombinedData &data, UChar_t mac5, double &, int &NFiredStrip, double slopeinverse = 0);
     static bool GetFiredTwoStrip(CombinedData &data, UChar_t mac5, vector<int> &GrArray);
-    static bool GetFiredTwoStrip(CombinedData &data, UChar_t mac5, vector<int> &GrArray, vector<double>&WeightArray);
+    static bool GetFiredTwoStrip(CombinedData &data, UChar_t mac5, vector<int> &GrArray, vector<double> &WeightArray);
 
     bool GetFiredTwoStrip(CombinedData &data, UChar_t mac5);
 
@@ -158,8 +158,7 @@ private:
     vector<int> fFiredGr;
     vector<double> fFiredGrWeight;
     bool fFiredFlag;
-    static TF1* fGausFun;
-    
+    static TF1 *fGausFun;
 };
 
 double SqrtMean(double ch1Weight, double Ch2Weight);

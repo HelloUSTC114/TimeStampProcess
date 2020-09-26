@@ -415,10 +415,10 @@ double GetCRCaliPlate(TH1 *h)
     fitfun->SetParameter(0, 500);
     fitfun->SetParameter(1, 1000);
     fitfun->SetParameter(2, 1000);
-    
-    fitfun->SetParLimits(1,0,4096);
-    fitfun->SetParLimits(2,0,4096);
-    
+
+    fitfun->SetParLimits(1, 0, 4096);
+    fitfun->SetParLimits(2, 0, 4096);
+
     fitfun->SetRange(0, 4096);
 
     h->Rebin(8);

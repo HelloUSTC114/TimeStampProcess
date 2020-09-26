@@ -5,19 +5,16 @@ using namespace std;
 
 extern int Search_Index_Max;
 
-
 // This file defines Loop index class and loop template class
 
 class LoopIndex
 {
 public:
-    LoopIndex(int Loop_Size, int Index = 0):
-    loop_size(Loop_Size), index(Index)
-    {};
+    LoopIndex(int Loop_Size, int Index = 0) : loop_size(Loop_Size), index(Index){};
     void Refresh();
     int Refresh(int a) const;
 
-    int Index()const {return index;}
+    int Index() const { return index; }
 
     // Define Operations of loop index, which acts as loop
     int operator=(int a);
@@ -31,43 +28,47 @@ public:
     int operator--();
     int operator--(int);
     int operator-=(int a);
-    int operator()() const{return Index();}
+    int operator()() const { return Index(); }
 
-    int GetLoopSize() const {return loop_size;}
+    int GetLoopSize() const { return loop_size; }
+
 private:
     int loop_size;
     int index = 0;
 };
 
-template <typename T> class Loop
+template <typename T>
+class Loop
 {
 public:
-
     Loop(int Loop_Size);
     ~Loop();
 
+    int Add(const T &value);                                                 // Copy value to loop space, return array index
+    const T &operator[](LoopIndex Index) const { return loop_ptr[Index()]; } // Access element by real event index
+    const T &operator[](int index) const { return loop_ptr[index]; }         // Access element by array index
 
-    int Add(const T &value);    // Copy value to loop space, return array index
-    const T & operator[](LoopIndex Index) const {return loop_ptr[Index()];} // Access element by real event index
-    const T& operator[](int index) const {return loop_ptr[index];}  // Access element by array index
-
-    int Index() const {return fLoopIndex();}
-    bool Is_Full() const {return full_flag;}
+    int Index() const { return fLoopIndex(); }
+    bool Is_Full() const { return full_flag; }
 
     // Search Element. Do not copy element. Constant functions.
-    int Search(const T& a) const;
-    bool Search(const T&a, int & index) const;
-    bool Search(const T&a, int * index, int &number) const; // Index is the last _th event.
+    int Search(const T &a) const;
+    bool Search(const T &a, int &index) const;
+    bool Search(const T &a, int *index, int &number) const; // Index is the last _th event.
 
-    const T& Get_Last_Event(int a) const ;
+    // bool Search(const T &a, bool (*funptr)(const T &, const T &));
+
+    const T &Get_Last_Event(int a) const;
     int Get_Last_Event_Index(int a) const;
 
-    const T& Get_First_Event(int a) const;
+    const T &Get_First_Event(int a) const;
     int Get_First_Event_Index(int a) const;
 
     void Print() const;
     void Show(int Event_Index) const
-    {cout << "Event:\t" << Event_Index << "\t" << Get_Last_Event(Event_Index) << endl;};
+    {
+        cout << "Event:\t" << Event_Index << "\t" << Get_Last_Event(Event_Index) << endl;
+    };
 
 protected:
     int loop_size = 0;
@@ -76,25 +77,23 @@ protected:
     bool *flag_ptr = 0;
 
     bool full_flag = 0;
-    int event_num = 0;  // Record event number in the loop, in case there's some problem when destruct element
+    int event_num = 0; // Record event number in the loop, in case there's some problem when destruct element
 
     bool Refresh_Full_Flag();
 
-    LoopIndex fLoopIndex;  // The next position to add a new data
-
+    LoopIndex fLoopIndex; // The next position to add a new data
 };
-// #endif 
+// #endif
 
 // #ifdef LOOP_CXX
 
-template <typename T> 
-Loop<T>::Loop(int Loop_Size):
-loop_size(Loop_Size),
-fLoopIndex(loop_size)
+template <typename T>
+Loop<T>::Loop(int Loop_Size) : loop_size(Loop_Size),
+                               fLoopIndex(loop_size)
 {
     loop_ptr = new T[loop_size];
     flag_ptr = new bool[loop_size];
-    for(int i = 0; i < loop_size; i++)
+    for (int i = 0; i < loop_size; i++)
     {
         flag_ptr[i] = false;
     }
@@ -103,15 +102,15 @@ fLoopIndex(loop_size)
 template <typename T>
 Loop<T>::~Loop()
 {
-    delete []loop_ptr;
-    delete []flag_ptr;
+    delete[] loop_ptr;
+    delete[] flag_ptr;
 
     loop_ptr = NULL;
     flag_ptr = NULL;
 }
 
 template <typename T>
-int Loop<T>::Add(const T & value)   // Copy value to Loop space
+int Loop<T>::Add(const T &value) // Copy value to Loop space
 {
     int index = fLoopIndex();
     loop_ptr[index] = value;
@@ -119,9 +118,9 @@ int Loop<T>::Add(const T & value)   // Copy value to Loop space
 
     fLoopIndex++;
 
-    if(event_num < loop_size)
+    if (event_num < loop_size)
     {
-        event_num ++;
+        event_num++;
     }
 
     Refresh_Full_Flag();
@@ -133,11 +132,11 @@ bool Loop<T>::Refresh_Full_Flag()
 {
     int index = fLoopIndex();
 
-    if(full_flag == 0)
+    if (full_flag == 0)
     {
-        for(int i = 0; i < loop_size; i++)
+        for (int i = 0; i < loop_size; i++)
         {
-            if(flag_ptr[index] == 0)
+            if (flag_ptr[index] == 0)
                 return false;
         }
         full_flag = true;
@@ -149,27 +148,27 @@ bool Loop<T>::Refresh_Full_Flag()
 template <typename T>
 void Loop<T>::Print() const
 {
-    for(int i = 0; i < event_num; i++)
+    for (int i = 0; i < event_num; i++)
     {
-        cout << "Event Index: " << i ;
-        cout << " Loop Index: " << fLoopIndex - (i+1) << endl;
+        cout << "Event Index: " << i;
+        cout << " Loop Index: " << fLoopIndex - (i + 1) << endl;
 
         cout << Get_Last_Event(i) << endl;
     }
 }
 
 template <typename T>
-const T& Loop<T>::Get_Last_Event(int a) const 
+const T &Loop<T>::Get_Last_Event(int a) const
 {
-    if(a >= loop_size)
+    if (a >= loop_size)
     {
         cout << "Warning: Out of loop" << endl;
         cout << "Loop size: " << loop_size << endl;
     }
-    
+
     int index_temp = Get_Last_Event_Index(a);
 
-    if(a >= event_num)
+    if (a >= event_num)
     {
         cout << "Warning: Out of Event numbers" << endl;
         cout << "Event numbers: " << event_num << endl;
@@ -181,14 +180,13 @@ const T& Loop<T>::Get_Last_Event(int a) const
 template <typename T>
 int Loop<T>::Get_Last_Event_Index(int a) const
 {
-    return fLoopIndex - (a+1);
-
+    return fLoopIndex - (a + 1);
 }
 
 template <typename T>
 int Loop<T>::Get_First_Event_Index(int a) const
 {
-    if(full_flag)
+    if (full_flag)
     {
         return fLoopIndex + a;
     }
@@ -196,18 +194,18 @@ int Loop<T>::Get_First_Event_Index(int a) const
 }
 
 template <typename T>
-const T& Loop<T>::Get_First_Event(int a) const
+const T &Loop<T>::Get_First_Event(int a) const
 {
 
-    if(a >= loop_size)
+    if (a >= loop_size)
     {
         cout << "Warning: Out of loop" << endl;
         cout << "Loop size: " << loop_size << endl;
     }
-    
+
     int index_temp = Get_First_Event_Index(a);
 
-    if(a >= event_num)
+    if (a >= event_num)
     {
         cout << "Warning: Out of Event numbers" << endl;
         cout << "Event numbers: " << event_num << endl;
@@ -216,9 +214,8 @@ const T& Loop<T>::Get_First_Event(int a) const
     return loop_ptr[index_temp];
 }
 
-
 template <typename T>
-int Loop<T>::Search(const T&a) const
+int Loop<T>::Search(const T &a) const
 {
     int temp;
     auto flag = Search(a, temp);
@@ -226,13 +223,12 @@ int Loop<T>::Search(const T&a) const
     return temp;
 }
 
-
 template <typename T>
-bool Loop<T>::Search(const T&a, int & index) const
+bool Loop<T>::Search(const T &a, int &index) const
 {
-    for(int i = 0; i < event_num; i++)
+    for (int i = 0; i < event_num; i++)
     {
-        if(Get_Last_Event(i) == a)
+        if (Get_Last_Event(i) == a)
         {
             index = i;
             return true;
@@ -242,26 +238,25 @@ bool Loop<T>::Search(const T&a, int & index) const
     return false;
 }
 
-
 template <typename T>
-bool Loop<T>::Search(const T&a, int * index, int &number)  const 
+bool Loop<T>::Search(const T &a, int *index, int &number) const
 {
     int save_index = 0;
 
-    for(int i = 0; i < event_num; i++)
+    for (int i = 0; i < event_num; i++)
     {
-        if(save_index >= Search_Index_Max)  break;
+        if (save_index >= Search_Index_Max)
+            break;
 
-        if(Get_Last_Event(i) == a)
+        if (Get_Last_Event(i) == a)
         {
             index[save_index] = i;
             save_index++;
-
         }
     }
     number = save_index;
 
-    if(save_index == 0)
+    if (save_index == 0)
     {
         return false;
     }
@@ -269,10 +264,6 @@ bool Loop<T>::Search(const T&a, int * index, int &number)  const
     {
         return true;
     }
-
 }
-
-
-
 
 #endif

@@ -7,32 +7,24 @@
 #include "Configure.h"
 #include "FileManager.h"
 
-
-
-
-class DetectorLoop: public Loop<CombinedData>
+class DetectorLoop : public Loop<CombinedData>
 {
 public:
-    DetectorLoop(int Loop_size, FileManager*);
+    DetectorLoop(int Loop_size, FileManager *);
     ~DetectorLoop();
     // Add and judge whether previous data should be saved to root file, return array index
-    int Add(const CombinedData& a); // Need to test function of this function. I doubt it can delete objects properly.
+    int Add(const CombinedData &a); // Need to test function of this function. I doubt it can delete objects properly.
 
     void ClearLoop();
     bool Fill(int event_index); // event_index is the oldest event index, Fill Data into file
 
     int GetEventNum() const;
-    bool Combine(PrimaryDataPtr& b, int index, const DetectorConfig * detector = gConfigure);
-
+    bool Combine(PrimaryDataPtr &b, int index, const DetectorConfig *detector = gConfigure);
 
 private:
-    CombinedData& GetLastEvent(int a);
+    CombinedData &GetLastEvent(int a);
     FileManager *fFileManager;
-
 };
-
-
-
 
 // class Detector is in charge of construct, destruct, search, combine, add... process of detector loop.
 // When create a new Detector, first create a boards_manager, and use this boards manager to create combine data and combine data loop.
@@ -48,8 +40,8 @@ class DetectorDataBuffer
 public:
     DetectorDataBuffer(FileManager *fileManager);
 
-    int Search(int Time);    // Search through time loop, return event index;
-    int Search(PrimaryDataPtr &a);    // Search through time loop
+    int Search(int Time);          // Search through time loop, return event index;
+    int Search(PrimaryDataPtr &a); // Search through time loop
     bool TryCombine(PrimaryDataPtr &a);
 
     int Add(CombinedData &a); // Add combined_data to loop combine data loop and data time to time loop;
@@ -58,21 +50,22 @@ private:
     DetectorLoop combine_data_loop;
     Loop<UInt_t> time_loop;
 
-    FileManager* fFileManager;
+    FileManager *fFileManager;
 };
 
-class OneGroup   // Construct boards manager, file manager, and detector info.
+class OneGroup // Construct boards manager, file manager, and detector info.
 {
 public:
-    OneGroup(DetectorConfig* detector);
-    OneGroup(OneGroup&) = delete;
-    OneGroup& operator=(OneGroup&) = delete;
+    OneGroup(DetectorConfig *detector);
+    OneGroup(OneGroup &) = delete;
+    OneGroup &operator=(OneGroup &) = delete;
     ~OneGroup(); // Save all buffer data which is still saved inside the loop.
 
     bool AddData(PrimaryDataPtr &a);
-    void PrintDetectorInfo(){fDetectorInfo->Print();}
+    void PrintDetectorInfo() { fDetectorInfo->Print(); }
 
     static OneGroup *&CurrentGroupManager();
+
 private:
     int fDetectorNumber;
     TDetectorInfo *fDetectorInfo;
@@ -85,8 +78,5 @@ private:
 };
 
 #define gGroupManager (OneGroup::CurrentGroupManager())
-
-
-
 
 #endif
