@@ -1,4 +1,3 @@
-#define LOOP_CXX
 #include "Loop.h"
 
 void LoopIndex::Refresh()

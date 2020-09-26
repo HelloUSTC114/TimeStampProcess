@@ -44,28 +44,29 @@ public:
     Loop(int Loop_Size);
     ~Loop();
 
-    int Add(const T &value);                                                 // Copy value to loop space, return array index
-    const T &operator[](LoopIndex Index) const { return loop_ptr[Index()]; } // Access element by real event index
-    const T &operator[](int index) const { return loop_ptr[index]; }         // Access element by array index
+    virtual int Add(const T &value);                                                 // Copy value to loop space, return array index
+    virtual const T &operator[](LoopIndex Index) const { return loop_ptr[Index()]; } // Access element by real event index
+    virtual const T &operator[](int index) const { return loop_ptr[index]; }         // Access element by array index
 
-    int Index() const { return fLoopIndex(); }
-    bool Is_Full() const { return full_flag; }
+    virtual int Index() const { return fLoopIndex(); }
+    virtual bool Is_Full() const { return full_flag; }
 
     // Search Element. Do not copy element. Constant functions.
-    int Search(const T &a) const;
-    bool Search(const T &a, int &index) const;
-    bool Search(const T &a, int *index, int &number) const; // Index is the last _th event.
+    virtual int Search(const T &a) const;
+    virtual bool Search(const T &a, int &index) const;
+    virtual bool Search(const T &a, int *index, int &number) const; // Index is the last _th event.
 
-    // bool Search(const T &a, bool (*funptr)(const T &, const T &));
+    virtual bool Search(const T &a, int *index, int &number, bool (*funptr)(const T &, const T &)) const; // Index is the last _th event.
+    virtual bool Search(const T &a, int &index, bool (*funptr)(const T &, const T &)) const;              // Serarch using lambda expression
 
-    const T &Get_Last_Event(int a) const;
-    int Get_Last_Event_Index(int a) const;
+    virtual const T &Get_Last_Event(int a) const;
+    virtual int Get_Last_Event_Index(int a) const;
 
-    const T &Get_First_Event(int a) const;
-    int Get_First_Event_Index(int a) const;
+    virtual const T &Get_First_Event(int a) const;
+    virtual int Get_First_Event_Index(int a) const;
 
-    void Print() const;
-    void Show(int Event_Index) const
+    virtual void Print() const;
+    virtual void Show(int Event_Index) const
     {
         cout << "Event:\t" << Event_Index << "\t" << Get_Last_Event(Event_Index) << endl;
     };
@@ -264,6 +265,49 @@ bool Loop<T>::Search(const T &a, int *index, int &number) const
     {
         return true;
     }
+}
+
+template <typename T>
+bool Loop<T>::Search(const T &a, int *index, int &number, bool (*funptr)(const T &, const T &)) const
+{
+    int save_index = 0;
+
+    for (int i = 0; i < event_num; i++)
+    {
+        if (save_index >= Search_Index_Max)
+            break;
+
+        if (funptr(a, Get_Last_Event(i)))
+        {
+            index[save_index] = i;
+            save_index++;
+        }
+    }
+    number = save_index;
+
+    if (save_index == 0)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+template <typename T>
+bool Loop<T>::Search(const T &a, int &index, bool (*funptr)(const T &, const T &)) const
+{
+    for (int i = 0; i < event_num; i++)
+    {
+        if (funptr(a, Get_Last_Event(i)))
+        {
+            index = i;
+            return true;
+        }
+    }
+    index = -1;
+    return false;
 }
 
 #endif
