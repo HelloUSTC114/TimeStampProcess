@@ -1,5 +1,7 @@
 #include "Loop.h"
 
+int Search_Index_Max = 5;
+
 void LoopIndex::Refresh()
 {
     index = index % loop_size;

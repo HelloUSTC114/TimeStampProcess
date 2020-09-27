@@ -13,7 +13,7 @@ public:
     bool operator==(const TimeStamp &) const;
     TimeStamp &operator=(const TimeStamp &);
 
-    Int_t &GlobalHWidth() { return fHWidth; }
+    double &GlobalHWidth() { return fHWidth; }
 
     void SetTimeStamp(int timestamp) { fTimeStamp = timestamp; }
     void SetOffset(int offset) { fOffset = offset; }
@@ -22,14 +22,14 @@ public:
     void ClearStamp();
     bool IsValid() const { return fValid; }
 
-private:
-    Int_t fTimeStamp;
-    Int_t fOffset;
+// private:
+    double fTimeStamp;
+    double fOffset;
 
     bool fValid = 0;
     int fAvergeCount = 0; // Counter for average numbers;
 
-    static Int_t fHWidth; // global Half width for time stamp.
+    static double fHWidth; // global Half width for time stamp.
 
     ClassDef(TimeStamp, 1)
 };

@@ -2,7 +2,7 @@
 
 ClassImp(TimeStamp)
 
-    Int_t TimeStamp::fHWidth = 100; // set global Half width at 100 ns in default
+    double TimeStamp::fHWidth = 100; // set global Half width at 100 ns in default
 
 bool TimeStamp::operator==(const TimeStamp &b) const
 {
@@ -10,6 +10,7 @@ bool TimeStamp::operator==(const TimeStamp &b) const
     {
         return true;
     }
+    return false;
 }
 
 TimeStamp &TimeStamp::operator=(const TimeStamp &b)
@@ -40,4 +41,5 @@ void TimeStamp::SetTime(int timeStamp, int offset)
     fTimeStamp = timeStamp;
     fOffset = offset;
     fValid = 1;
+    fAvergeCount = 1;
 }

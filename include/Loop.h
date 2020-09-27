@@ -42,9 +42,9 @@ class Loop
 {
 public:
     Loop(int Loop_Size);
-    ~Loop();
+    virtual ~Loop();
 
-    virtual int Add(const T &value);                                                 // Copy value to loop space, return array index
+    virtual int Add(T &value);                                                       // Copy value to loop space, return array index
     virtual const T &operator[](LoopIndex Index) const { return loop_ptr[Index()]; } // Access element by real event index
     virtual const T &operator[](int index) const { return loop_ptr[index]; }         // Access element by array index
 
@@ -58,6 +58,9 @@ public:
 
     virtual bool Search(const T &a, int *index, int &number, bool (*funptr)(const T &, const T &)) const; // Index is the last _th event.
     virtual bool Search(const T &a, int &index, bool (*funptr)(const T &, const T &)) const;              // Serarch using lambda expression
+
+    template <typename T2>
+    bool Search(const T2 &a, int &index, bool (*funptr)(const T &, const T2 &)) const; // Serarch using lambda expression
 
     virtual const T &Get_Last_Event(int a) const;
     virtual int Get_Last_Event_Index(int a) const;
@@ -111,7 +114,7 @@ Loop<T>::~Loop()
 }
 
 template <typename T>
-int Loop<T>::Add(const T &value) // Copy value to Loop space
+int Loop<T>::Add(T &value) // Copy value to Loop space
 {
     int index = fLoopIndex();
     loop_ptr[index] = value;
@@ -301,6 +304,22 @@ bool Loop<T>::Search(const T &a, int &index, bool (*funptr)(const T &, const T &
     for (int i = 0; i < event_num; i++)
     {
         if (funptr(a, Get_Last_Event(i)))
+        {
+            index = i;
+            return true;
+        }
+    }
+    index = -1;
+    return false;
+}
+
+template <typename T>
+template <typename T2>
+bool Loop<T>::Search(const T2 &a, int &index, bool (*funptr)(const T &, const T2 &)) const
+{
+    for (int i = 0; i < event_num; i++)
+    {
+        if (funptr(Get_Last_Event(i), a))
         {
             index = i;
             return true;
