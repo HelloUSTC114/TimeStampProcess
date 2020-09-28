@@ -17,6 +17,7 @@ Track::Track(UChar_t mac5, UShort_t chg[32], UInt_t ts0, UInt_t ts1, UInt_t ts0_
 
 ostream &operator<<(ostream &os, const Event &a)
 {
+    os << "TimeStam: " << a.fTime.fTimeStamp - a.fTime.fOffset << endl;
     return os;
 }
 
@@ -104,7 +105,6 @@ void Event::TransferEvent(Event &event, TTree *tree)
 
 bool Event::MergeEvent(Event &event)
 {
-    cout << "Test: Merging: " << endl;
     if (fValid)
     {
         if (!(fTime == event.fTime))
@@ -126,7 +126,6 @@ bool Event::MergeEvent(Event &event)
     fNT0Data += event.fNT0Data;
 
     fValid |= event.fValid;
-    cout << "Test: Merged" << endl;
     // Merge fTracks
     for (int i = 0; i < event.fTracks.GetEntries(); i++)
     {

@@ -152,6 +152,11 @@ bool Loop<T>::Refresh_Full_Flag()
 template <typename T>
 void Loop<T>::Print() const
 {
+    cout << "Loop Information: " << endl;
+    cout << "Loop Size: " << loop_size << endl;
+    cout << "Event Number: " << event_num << endl;
+    cout << "Is Full: " << full_flag << endl;
+    cout << "Next data index: " << fLoopIndex() << endl;
     for (int i = 0; i < event_num; i++)
     {
         cout << "Event Index: " << i;

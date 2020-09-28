@@ -32,6 +32,10 @@ int main()
     UInt_t ts1 = ts0, ts0_ref = 1e9, ts1_ref = 1e9;
 
     Track *trackArray[100][4]{0};
+
+    EventLoop loop(20);
+    loop.Print();
+
     for (int i = 0; i < 100; i++)
     {
         cout << i << '\t' << " Loop" << endl;
@@ -41,28 +45,21 @@ int main()
         {
             auto tTrack = new Track(mac5++, chg, ts0, ts1, ts0_ref, ts1_ref);
             trackArray[i][j] = tTrack;
-            auto mergeflag = saveEvent->MergeEvent(tempEvent->GenerateFromTrack(tTrack));
 
-            // saveEvent->fTracks.Add(tTrack);
-            // saveEvent->fNTracks++;
-            // saveEvent->fValid = 1;
-
-            cout << "Merge flag: " << mergeflag << endl;
-            // saveEvent->GenerateFromTrack(tTrack);
-
-            // saveEvent->fTracks.Add(tTrack);
-            // saveEvent->fNTracks = saveEvent->fTracks.GetEntries();
-            // saveEvent->fValid = 1;
-
-            // cout << saveEvent->fNT0Data << '\t' << saveEvent->fTracks.GetEntries() << '\t' << saveEvent->fValid << endl;
+            loop.ProcessOneEvent(tempEvent->GenerateFromTrack(tTrack));
+            // auto mergeflag = saveEvent->MergeEvent(tempEvent->GenerateFromTrack(tTrack));
+            // cout << "Merge flag: " << mergeflag << endl;
         }
-        // saveEvent->Write(Form("Event%d", i));
-        // tree->Fill();
-        saveEvent->FillEvent();
-        cout << "Test: Finish" << endl
-             << endl;
+
+        // cout << "Event: " << i << '\t' << *saveEvent << endl;
+        // saveEvent->FillEvent();
+        // cout << "Test: Finish" << endl
+        //      << endl;
+
+        ts0 += 300;
     }
 
+    loop.ForceSaveAll();
     tree->Write();
     file->Close();
 

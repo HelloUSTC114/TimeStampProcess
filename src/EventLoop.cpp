@@ -1,5 +1,9 @@
 #include "EventLoop.h"
 
+EventLoop::EventLoop(int loopSize) : Loop<Event>(loopSize)
+{
+}
+
 int EventLoop::Add(Event &value)
 {
     int index = fLoopIndex();
@@ -34,11 +38,23 @@ int EventLoop::ProcessOneEvent(Event &value)
 
 EventLoop::~EventLoop()
 {
+    // ForceSaveAll();
+    // Loop<Event>::~Loop();
+}
+
+int EventLoop::ForceSaveAll()
+{
     for (int i = 0; i < event_num; i++)
     {
         loop_ptr[Get_First_Event_Index(i)].FillEvent();
     }
+    return event_num;
 }
+
+// void EventLoop::Reset()
+// {
+
+// }
 
 // bool EventLoop::SearchTimeData(const TimeStamp &a, int &index) const
 // {

@@ -14,12 +14,14 @@ public:
 
     int ProcessOneEvent(Event &value);
 
+    int ForceSaveAll();
+
     // virtual int ProcessTimeData(const TimeData &a);
 
     // bool SearchTimeData(const TimeStamp &a, int &index) const;
 
 protected:
-    int fLoopSize = 0;
+    // void Reset();   // without saving any data
 };
 
 #endif
