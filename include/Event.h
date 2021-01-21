@@ -18,7 +18,6 @@ public:
     Track(UChar_t mac5, UShort_t chg[32], UInt_t ts0, UInt_t ts1, UInt_t ts0_ref, UInt_t ts1_ref);
 
     void SetStampOffset(Int_t offset);
-    void Clear();
 
     UChar_t fMac5;
     UShort_t fChg[32];
@@ -38,10 +37,14 @@ public:
     TimeStamp fTime;
 
     void SetStampOffset(Int_t offset);
-    void Clear();
+
+    int fEventNum = 0;
+    double fT1 = 0, fT2 = 0, fTOT1 = 0, fTOT2 = 0;
 
     ClassDef(T0Data, 1);
 };
+
+ifstream &operator>>(ifstream &is, T0Data &t0Data);
 
 #define gEventTree (Event::GetCurrentTree())
 class Event : public TObject

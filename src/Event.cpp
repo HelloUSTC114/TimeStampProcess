@@ -15,6 +15,21 @@ Track::Track(UChar_t mac5, UShort_t chg[32], UInt_t ts0, UInt_t ts1, UInt_t ts0_
     fTime.SetTime(ts0, 0);
 }
 
+void Track::SetStampOffset(Int_t offset)
+{
+    fTime.fOffset = offset;
+}
+
+void T0Data::SetStampOffset(Int_t offset)
+{
+    fTime.fOffset = offset;
+}
+
+ifstream &operator>>(ifstream &is, T0Data &t0Data)
+{
+    is >> t0Data.fEventNum >> t0Data.fT1 >> t0Data.fT2 >> t0Data.fTOT1 >> t0Data.fTOT2;
+}
+
 ostream &operator<<(ostream &os, const Event &a)
 {
     os << "TimeStam: " << a.fTime.fTimeStamp - a.fTime.fOffset << endl;
