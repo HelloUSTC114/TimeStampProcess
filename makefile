@@ -73,6 +73,10 @@ distclean:
 test:  test.cpp $(LIBFULL)
 	@echo Generating $@
 	@`root-config --cxx `	-o	$@	$<	-Llib	-l$(LIB)	`root-config --libs` $(CXXFLAGS)
+	
+testRead:  testRead.cpp $(LIBFULL)
+	@echo Generating $@
+	@`root-config --cxx `	-o	$@	$<	-Llib	-l$(LIB)	`root-config --libs` $(CXXFLAGS)
 
 
 
