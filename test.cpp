@@ -43,6 +43,7 @@ int main()
         tempEvent->Clear();
         for (int j = 0; j < 4; j++)
         {
+            std::cout << "Processing: " << i << '\t' << j << '\t' << mac5 << '\t' << ts0 << '\t' << std::endl;
             auto tTrack = new Track(mac5++, chg, ts0, ts1, ts0_ref, ts1_ref);
             trackArray[i][j] = tTrack;
 

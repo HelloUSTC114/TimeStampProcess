@@ -34,6 +34,7 @@ int EventLoop::ProcessOneEvent(Event &value)
         return 0;
     }
     loop_ptr[Get_Last_Event_Index(index)].MergeEvent(value);
+    return 1;
 }
 
 EventLoop::~EventLoop()

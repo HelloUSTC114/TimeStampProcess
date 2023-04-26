@@ -60,3 +60,5 @@ rootHeight*
 *.ssroot
 RepairData
 testRead
+build/
+*.user

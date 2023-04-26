@@ -7,7 +7,7 @@
 
 #define gHWidth (TimeStamp::GlobalHWidth())
 
-class TimeStamp
+class TimeStamp : public TObject
 {
 public:
     bool operator==(const TimeStamp &) const;
@@ -22,7 +22,7 @@ public:
     void ClearStamp();
     bool IsValid() const { return fValid; }
 
-// private:
+    // private:
     double fTimeStamp;
     double fOffset;
 

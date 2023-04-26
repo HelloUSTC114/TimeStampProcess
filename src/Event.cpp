@@ -28,6 +28,7 @@ void T0Data::SetStampOffset(Int_t offset)
 ifstream &operator>>(ifstream &is, T0Data &t0Data)
 {
     is >> t0Data.fEventNum >> t0Data.fT1 >> t0Data.fT2 >> t0Data.fTOT1 >> t0Data.fTOT2;
+    return is;
 }
 
 ostream &operator<<(ostream &os, const Event &a)
@@ -129,9 +130,9 @@ bool Event::MergeEvent(Event &event)
     }
 
     // Merge time stamp, this can be handled by TimeStamp itself
-    cout << "fTime: " << fTime.fAvergeCount << '\t' << fTime.fTimeStamp - fTime.fOffset << endl;
+    // cout << "fTime: " << fTime.fAvergeCount << '\t' << fTime.fTimeStamp - fTime.fOffset << endl;
     fTime = event.fTime;
-    cout << "fTime: " << fTime.fAvergeCount << '\t' << fTime.fTimeStamp - fTime.fOffset << endl;
+    // cout << "fTime: " << fTime.fAvergeCount << '\t' << fTime.fTimeStamp - fTime.fOffset << endl;
 
     // Merge T0
     for (int i = 0; i < event.fT0Data.GetEntries(); i++)
